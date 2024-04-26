@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getDetailsByCityName } from '../redux/reducers/weatherReducer';
 
 import { TbWind } from 'react-icons/tb';
 import { CiTempHigh } from 'react-icons/ci';
@@ -7,8 +9,26 @@ import { CiLocationOn } from 'react-icons/ci';
 import { FaSearch } from 'react-icons/fa';
 
 const HomePage = () => {
+  const dispatch = useDispatch();
+  const [search, setSearch] = useState('');
   const [currentTime, setCurrentTime] = useState('');
   const [currentDate, setCurrentDate] = useState('');
+
+  const { loading, weeklyData, error } = useSelector(
+    (state) => state.weeklyDetailsList
+  );
+
+  useEffect(() => {
+    if (weeklyData.length === 0) {
+      dispatch(getDetailsByCityName(search));
+    }
+  }, [dispatch, weeklyData]);
+
+  console.log(weeklyData);
+
+  const handleSearch = () => {
+    dispatch(getDetailsByCityName(search));
+  };
 
   useEffect(() => {
     const updateTime = () => {
@@ -48,7 +68,7 @@ const HomePage = () => {
         'December',
       ];
       const dayOfWeek = days[now.getDay()];
-      const dayOfMonth = now.getMonth();
+      const dayOfMonth = now.getDate();
       const month = months[now.getMonth()];
       const year = now.getFullYear();
       const formattedDate = `${dayOfWeek}, ${
@@ -73,21 +93,28 @@ const HomePage = () => {
             <span className='font-bold'>Weather </span>
             <span className='text-gray-500'>Forcast</span>
           </p>
-          <form className='max-w-xl py-2 px-6 rounded-full bg-gray-50 border flex focus-within:border-gray-300 mb-4'>
+          <div className='max-w-xl py-2 px-6 rounded-full bg-gray-50 border flex focus-within:border-gray-300 mb-4'>
             <input
               type='text'
               placeholder='Search by City'
               className='bg-transparent w-full focus:outline-none pr-4 font-semibold border-0 focus:ring-0 px-0 py-0'
-              name='topic'
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
-            <button className='hidden md:flex flex-row items-center justify-center min-w-[130px] px-4 rounded-full border disabled:cursor-not-allowed disabled:opacity-50 transition ease-in-out duration-150 text-base bg-black text-white font-medium tracking-wide border-transparent py-1.5 h-[38px] -mr-3'>
+            <button
+              onClick={handleSearch}
+              className='hidden md:flex flex-row items-center justify-center min-w-[130px] px-4 rounded-full border disabled:cursor-not-allowed disabled:opacity-50 transition ease-in-out duration-150 text-base bg-black text-white font-medium tracking-wide border-transparent py-1.5 h-[38px] -mr-3'
+            >
               Search
             </button>
 
-            <button className='md:hidden flex flex-row items-center justify-center w-min px-4 rounded-full border disabled:cursor-not-allowed disabled:opacity-50 transition ease-in-out duration-150 text-base bg-black text-white font-medium tracking-wide border-transparent py-1.5 h-[38px] -mr-3'>
+            <button
+              onClick={handleSearch}
+              className='md:hidden flex flex-row items-center justify-center w-min px-4 rounded-full border disabled:cursor-not-allowed disabled:opacity-50 transition ease-in-out duration-150 text-base bg-black text-white font-medium tracking-wide border-transparent py-1.5 h-[38px] -mr-3'
+            >
               <FaSearch />
             </button>
-          </form>
+          </div>
           <p className='text-lg mb-1 font-bold'>Weekly</p>
           <div className='grid grid-cols-1 lg:grid-cols-4 gap-4 mb-4'>
             {[0, 1, 2, 3, 4, 5, 6].map((_, index) => (
