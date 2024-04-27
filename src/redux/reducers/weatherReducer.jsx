@@ -30,14 +30,18 @@ const getDetailsByCityName = createAsyncThunk(
       if (!country) {
         // Fetch country from an additional API if not yet determined
         const locationResponse = await axios.get(
-          `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=d461a962e735f3811fe21d7eee0a878b`
+          `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${
+            import.meta.env.VITE_OPENWEATHERMAP_APP_ID
+          }`
         );
         country = locationResponse.data.sys.country;
       }
 
       // Fetch weather data
       const weatherResponse = await axios.get(
-        `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&units=metric&cnt=7&appid=d461a962e735f3811fe21d7eee0a878b`
+        `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&units=metric&cnt=7&appid=${
+          import.meta.env.VITE_OPENWEATHERMAP_APP_ID
+        }`
       );
 
       return fulfillWithValue({
