@@ -35,19 +35,19 @@ Before you begin, make sure you have the following installed:
 - On the repository page, click on the "Code" button and copy the URL provided under "Clone with HTTPS" or "Clone with SSH", depending on your setup
 - Open your terminal or command prompt and run the following command, replacing <URL> with the URL you just copied:
 
-### git clone <URL>
+### `git clone <URL>`
 
 ## Step 3: Navigate to the Project Directory
 
 After cloning, move into the project directory by running:
 
-### cd vite-react-app
+### `cd vite-react-app`
 
 Replace 'vite-react-app' with the name of the directory
 
 ## Step 4: Install Dependencies
 
-### npm install
+### `npm install`
 
 This command will install all the necessary packages and dependencies defined in the package.json file.
 
@@ -55,7 +55,7 @@ This command will install all the necessary packages and dependencies defined in
 
 To start the application, run:
 
-### npm run dev
+### `npm run dev`
 
 This command starts the development server. You should see output in the terminal that includes the URL at which the app is running
 
