@@ -1,18 +1,18 @@
 import React, { useRef } from 'react';
 import { Player } from '@lottiefiles/react-lottie-player';
 
-const Loading = () => {
+const GithubIcon = () => {
   const lottie = useRef();
   return (
     <Player
       ref={lottie}
       autoplay={true}
       loop={true}
-      src='https://lottie.host/1a745df2-4f34-4d35-a9f2-c2b253c7fa7e/oYSc5BIDom.json'
+      src='https://lottie.host/aef03301-12e1-42e6-bf9c-456ba720e44b/FodOObFJXT.json'
       background='transparent'
-      style={{ height: '8rem', width: '8rem' }}
+      style={{ height: '5rem', width: '5rem' }}
     ></Player>
   );
 };
 
-export default Loading;
+export default GithubIcon;

@@ -5,6 +5,7 @@ import { getDetailsByCityName } from '../redux/reducers/weatherReducer';
 import { TbWind } from 'react-icons/tb';
 import { CiTempHigh } from 'react-icons/ci';
 import { FaSearch } from 'react-icons/fa';
+import { RiCelsiusFill, RiFahrenheitFill } from 'react-icons/ri';
 
 import Sun from '../constant/animateComponent/Sun';
 import Cloud from '../constant/animateComponent/Cloud';
@@ -20,6 +21,7 @@ const HomePage = () => {
   const [search, setSearch] = useState('');
   const [currentTime, setCurrentTime] = useState('');
   const [currentDate, setCurrentDate] = useState('');
+  const [deg, setDeg] = useState(false);
 
   const { loading, weeklyData, error } = useSelector(
     (state) => state.weeklyDetailsList
@@ -103,10 +105,33 @@ const HomePage = () => {
         <div className='container font-rubik'>
           <div className='flex rounded-lg border-4 border-white m-1 bg-[#f5f5dc]'>
             <div className='flex-grow p-4'>
-              <p className='text-3xl font-extrabold text-red-500'>
-                {currentTime}
-              </p>
-              <p className='text-sm mb-4 text-gray-500'>{currentDate}</p>
+              <div className='flex justify-between items-center'>
+                <div>
+                  <p className='text-3xl font-extrabold text-red-500'>
+                    {currentTime}
+                  </p>
+                  <p className='text-sm mb-4 text-gray-500'>{currentDate}</p>
+                </div>
+                <div className='flex flex-col md:flex-row justify-between gap-2 items-start'>
+                  <button
+                    onClick={() => setDeg(false)}
+                    className={`py-1.5 px-3 hover:scale-105 hover:shadow text-center border border-gray-300 rounded-full w-12 h-12 flex items-center gap-1 lg:gap-2 ${
+                      !deg && 'bg-red-500 text-white'
+                    }`}
+                  >
+                    <RiCelsiusFill />
+                  </button>
+
+                  <button
+                    onClick={() => setDeg(true)}
+                    className={`py-1.5 px-3 hover:scale-105 hover:shadow text-center border border-gray-300 rounded-full w-12 h-12 flex items-center gap-1 lg:gap-2 ${
+                      deg && 'bg-red-500 text-white'
+                    }`}
+                  >
+                    <RiFahrenheitFill />
+                  </button>
+                </div>
+              </div>
               <p className='text-lg mb-1'>
                 <span className='font-bold'>Weather </span>
                 <span className='text-gray-500'>Forcast</span>
@@ -138,7 +163,9 @@ const HomePage = () => {
                 {weeklyData.length > 0 &&
                   weeklyData.map((item, index) => {
                     const windspeed = item.windSpeed.toFixed(2);
-                    const temp = Math.round(item.temp);
+                    const temp = deg
+                      ? Math.round((item.temp * 9) / 5 + 32)
+                      : Math.round(item.temp);
                     const date = new Date();
                     const dayOfWeek =
                       date.getDay() + index > days.length - 1
@@ -171,7 +198,10 @@ const HomePage = () => {
                             </p>
                             <p className='text-xs text-gray-500'>
                               <CiTempHigh className='inline mr-2' />{' '}
-                              {item.feelsLike}&#176;
+                              {deg
+                                ? ((item.feelsLike * 9) / 5 + 32).toFixed(2)
+                                : item.feelsLike}
+                              &#176;
                             </p>
                           </div>
                         </div>
@@ -278,22 +308,30 @@ const HomePage = () => {
               <div className='min-w-full min-h-full px-4 flex flex-col justify-center items-center gap-4'>
                 <div className='text-white text-3xl flex items-center justify-center mr-8'>
                   <Gps />{' '}
-                  {weeklyData.length > 0 &&
-                    weeklyData[0].city.charAt(0).toUpperCase() +
-                      weeklyData[0].city.slice(1)}
-                  , {weeklyData.length > 0 && weeklyData[0].country}
+                  {weeklyData[0].city.charAt(0).toUpperCase() +
+                    weeklyData[0].city.slice(1)}
+                  , {weeklyData[0].country}
                 </div>
                 <div className='text-6xl  text-white font-bold '>
-                  {weeklyData.length > 0 && Math.round(weeklyData[0].temp)}
+                  {deg
+                    ? Math.round((weeklyData[0].temp * 9) / 5 + 32)
+                    : Math.round(weeklyData[0].temp)}
                   &#176;
                 </div>
                 <div className='font-semibold text-lg'>
-                  {weeklyData.length > 0 && weeklyData[0].description}
+                  {weeklyData[0].description}
                 </div>
                 <div className=' text-white font-bold text-xl flex items-center'>
-                  <High /> {weeklyData.length > 0 && weeklyData[0].maxTemp}
+                  <High />{' '}
+                  {deg
+                    ? ((weeklyData[0].maxTemp * 9) / 5 + 32).toFixed(2)
+                    : weeklyData[0].maxTemp}
                   &#176;&ensp;
-                  <Low /> {weeklyData.length > 0 && weeklyData[0].minTemp}&#176;
+                  <Low />{' '}
+                  {deg
+                    ? ((weeklyData[0].minTemp * 9) / 5 + 32).toFixed(2)
+                    : weeklyData[0].minTemp}
+                  &#176;
                 </div>
               </div>
             </div>
